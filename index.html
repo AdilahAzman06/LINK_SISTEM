@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +13,32 @@
         .btn-custom { margin-top: 10px; }
         .container { max-width: 700px; }
         .is-invalid { border-color: #dc3545 !important; }
+        /* Gaya Loading Overlay */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            /* Menggunakan Flexbox untuk centering */
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 
 <body class="bg-light">
+
+<div id="loading-overlay">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Memuat...</span>
+    </div>
+    <p class="ms-3 lead">Sedang menghantar maklumat...</p>
+</div>
 
 <div class="container py-4">
 
@@ -24,125 +46,141 @@
         <img src="Logo_KV.jpg" alt="Logo Kolej Vokasional Pasir Mas" class="img-fluid rounded shadow" style="max-height: 150px;">
         <h1 class="text-black">PEMBANGUNAN SISTEM PENGURUSAN PENGGUNAAN KOMPUTER DAN PENCETAK</h1>
     </div>
+    
+    <form id="pengurusanForm">
 
-    <!-- PAGE 1 -->
-    <div class="page active" id="page1">
-        <h2 class="text-secondary mb-3">1. Maklumat Pengguna</h2>
+        <div class="page active" id="page1">
+            <h2 class="text-secondary mb-3">1. Maklumat Pengguna</h2>
 
-        <label>Kediaman:<span class="text-danger">*</span></label>
-        <select id="kediaman" class="form-select" required>
-            <option value="">--Pilih--</option>
-            <option value="Aspura">Aspura</option>
-            <option value="Aspuri">Aspuri</option>
-        </select>
+            <label>Kediaman:<span class="text-danger">*</span></label>
+            <select id="kediaman" name="kediaman" class="form-select" required> 
+                <option value="">--Pilih--</option>
+                <option value="Aspura">Aspura</option>
+                <option value="Aspuri">Aspuri</option>
+            </select>
 
-        <label>Nama Penuh:<span class="text-danger">*</span></label>
-        <input type="text" id="nama" class="form-control" placeholder="Isi Nama Penuh" required>
+            <label>Nama Penuh:<span class="text-danger">*</span></label>
+            <input type="text" id="nama" name="nama" class="form-control" placeholder="Isi Nama Penuh" required>
 
-        <label>Tahun Pengajian:<span class="text-danger">*</span></label>
-        <select id="tahun" class="form-select" required>
-            <option value="">--Pilih--</option>
-            <option value="DVM">DVM</option>
-            <option value="SVM">SVM</option>
-        </select>
+            <label>Tahun Pengajian:<span class="text-danger">*</span></label>
+            <select id="tahun" name="tahun" class="form-select" required>
+                <option value="">--Pilih--</option>
+                <option value="DVM">DVM</option>
+                <option value="SVM">SVM</option>
+            </select>
 
-        <label>Kelas:<span class="text-danger">*</span></label>
-        <select id="kelas" class="form-select" required>
-            <option value="">--Pilih--</option>
-            <option value="BPP">BPP</option>
-            <option value="BPR">BPR</option>
-            <option value="BKP1">BKP1</option>
-            <option value="BKP2">BKP2</option>
-            <option value="BPM">BPM</option>
-            <option value="KSK1">KSK1</option>
-            <option value="KSK2">KSK2</option>
-        </select>
+            <label>Kelas:<span class="text-danger">*</span></label>
+            <select id="kelas" name="kelas" class="form-select" required>
+                <option value="">--Pilih--</option>
+                <option value="BPP">BPP</option>
+                <option value="BPR">BPR</option>
+                <option value="BKP1">BKP1</option>
+                <option value="BKP2">BKP2</option>
+                <option value="BPM">BPM</option>
+                <option value="KSK1">KSK1</option>
+                <option value="KSK2">KSK2</option>
+            </select>
 
-        <button onclick="validatePage1()" class="btn btn-primary w-100 btn-custom">Seterusnya ➡️</button>
-    </div>
-
-    <!-- PAGE 2 -->
-    <div class="page" id="page2">
-        <h2 class="text-secondary mb-3">2. Pilih Tujuan</h2>
-
-        <label>Tujuan Penggunaan:</label>
-        <select id="tujuan" class="form-select">
-            <option value="">--Pilih Tujuan--</option>
-            <option value="Print">Print</option>
-            <option value="Penggunaan Komputer">Penggunaan Komputer</option>
-            <option value="Lain-lain">Lain-lain</option>
-        </select>
-
-        <input type="text" id="lainTujuan" class="form-control" placeholder="Nyatakan tujuan lain" style="display:none;">
-
-        <div class="d-flex justify-content-between mt-4">
-            <button onclick="nextPage(1)" class="btn btn-secondary">⬅️ Kembali</button>
-            <button onclick="prosesTujuan()" class="btn btn-primary">Seterusnya ➡️</button>
-        </div>
-    </div>
-
-    <!-- PAGE 3 -->
-    <div class="page" id="page3">
-        <h2 class="text-secondary mb-3">3. Cara Pembayaran</h2>
-
-        <label>Pilih Cara Pembayaran:</label>
-        <select id="bayaran" class="form-select" onchange="pilihBayaran()">
-            <option value="">--Pilih Cara Pembayaran--</option>
-            <option value="Tunai">Tunai</option>
-            <option value="QR">Imbas Kod QR</option>
-        </select>
-
-        <div id="qrSection" class="text-center p-3 mt-3 border rounded bg-warning-subtle" style="display:none;">
-            <h3>Imbas QR</h3>
-            <img src="QR_CikguRuslina.jpeg" class="img-fluid mt-2" style="max-height: 200px;">
+            <button type="button" onclick="validatePage1()" class="btn btn-primary w-100 btn-custom">Seterusnya ➡️</button>
         </div>
 
-        <div class="d-flex justify-content-between mt-4">
-            <button onclick="nextPage(2)" class="btn btn-secondary">⬅️ Kembali</button>
-            <button onclick="hantarData()" class="btn btn-success">Hantar Maklumat ✅</button>
-        </div>
-    </div>
+        <div class="page" id="page2">
+            <h2 class="text-secondary mb-3">2. Pilih Tujuan</h2>
 
-    <!-- PAGE 4 -->
+            <label>Tujuan Penggunaan:</label>
+            <select id="tujuan" name="tujuan" class="form-select">
+                <option value="">--Pilih Tujuan--</option>
+                <option value="Print">Print</option>
+                <option value="Penggunaan Komputer">Penggunaan Komputer</option>
+                <option value="Lain-lain">Lain-lain</option>
+            </select>
+
+            <input type="text" id="lainTujuan" name="lainTujuan" class="form-control" placeholder="Nyatakan tujuan lain" style="display:none;">
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" onclick="nextPage(1)" class="btn btn-secondary">⬅️ Kembali</button>
+                <button type="button" onclick="prosesTujuan()" class="btn btn-primary">Seterusnya ➡️</button>
+            </div>
+        </div>
+
+        <div class="page" id="page3">
+            <h2 class="text-secondary mb-3">3. Cara Pembayaran</h2>
+
+            <label>Pilih Cara Pembayaran:</label>
+            <select id="bayaran" name="bayaran" class="form-select" onchange="pilihBayaran()">
+                <option value="">--Pilih Cara Pembayaran--</option>
+                <option value="Tunai">Tunai</option>
+                <option value="QR">Imbas Kod QR</option>
+            </select>
+
+            <div id="qrSection" class="text-center p-3 mt-3 border rounded bg-warning-subtle" style="display:none; align-items: center; justify-content: center; flex-direction: column;">
+                <h3>Imbas QR</h3>
+                <img src="QR_CikguRuslina.jpeg" class="img-fluid mt-2" style="max-height: 200px;">
+                <small class="text-muted mt-2">Sila pastikan pembayaran dibuat sebelum menghantar.</small>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" onclick="nextPage(2)" class="btn btn-secondary">⬅️ Kembali</button>
+                <button type="submit" class="btn btn-success">Hantar Maklumat ✅</button>
+            </div>
+        </div>
+    </form>
     <div class="page text-center" id="page4">
         <h2 class="text-success mb-4">🎉 Berjaya!</h2>
-        <p class="lead">Maklumat anda telah dihantar.</p>
+        <p class="lead">Maklumat anda telah **berjaya** dihantar ke Google Sheet.</p>
         <button onclick="resetForm()" class="btn btn-info btn-lg mt-3">Isi Semula</button>
     </div>
 
 </div>
 
 <script>
+    // **URL Apps Script Anda yang baru**
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw2IhaJojwuf_GDboTR0F_XPcKwh5L_diSd3ZBw3_NMr6RELmbPyrS5HhcDfZOCvuDa/exec";
+    
+    const form = document.getElementById('pengurusanForm');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    
+    // Event Listener untuk Borang: Mencegah penghantaran standard dan mengendalikan dengan fetch
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Pastikan pilihan bayaran telah dibuat jika sedang berada di Page 3
+        if(document.getElementById('bayaran').value === "" && document.getElementById('page3').classList.contains('active')){
+            alert("Sila pilih cara pembayaran.");
+            return;
+        }
+        hantarData(e.target);
+    });
+
     // Validasi halaman 1
     function validatePage1() {
-        const req = ['kediaman','nama','tahun','kelas'];
+        const req = ['kediaman', 'nama', 'tahun', 'kelas'];
         let ok = true;
 
-        req.forEach(id=>{
-            const el=document.getElementById(id);
+        req.forEach(id => {
+            const el = document.getElementById(id);
             el.classList.remove('is-invalid');
-            if(el.value===""){ el.classList.add('is-invalid'); ok=false; }
+            if (el.value === "") { el.classList.add('is-invalid'); ok = false; }
         });
 
-        if(ok) nextPage(2);
+        if (ok) nextPage(2);
         else alert("Sila lengkapkan semua maklumat.");
     }
 
     // Tukar halaman
-    function nextPage(p){
-        document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-        document.getElementById('page'+p).classList.add('active');
-        window.scrollTo(0,0);
+    function nextPage(p) {
+        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+        document.getElementById('page' + p).classList.add('active');
+        window.scrollTo(0, 0);
     }
 
     // Tunjuk input lain-lain jika dipilih
-    document.getElementById("tujuan").addEventListener("change", function(){
+    document.getElementById("tujuan").addEventListener("change", function () {
         document.getElementById("lainTujuan").style.display =
             (this.value === "Lain-lain") ? "block" : "none";
     });
 
-    // Proses tujuan
-    function prosesTujuan(){
+    // Proses tujuan: "Print" ke Page 3, selain itu hantar terus
+    function prosesTujuan() {
         const t = document.getElementById("tujuan").value;
 
         if (t === "") {
@@ -151,48 +189,53 @@
         }
 
         if (t === "Print") {
-            nextPage(3); // Pergi ke halaman bayaran
+            nextPage(3); 
         } else {
-            // Terus hantar data untuk tujuan lain
-            hantarData();
+            // Jika bukan Print, teruskan penghantaran dari Page 2
+            hantarData(form); 
         }
     }
 
     // Papar QR jika dipilih
-    function pilihBayaran(){
+    function pilihBayaran() {
         document.getElementById("qrSection").style.display =
-            document.getElementById("bayaran").value==="QR" ? "block" : "none";
+            document.getElementById("bayaran").value === "QR" ? "flex" : "none";
     }
 
     // Reset form
-    function resetForm(){ location.reload(); }
+    function resetForm() { location.reload(); }
 
     // Hantar data ke Google Sheet
-    function hantarData() {
-        const url = "https://script.google.com/macros/s/AKfycbxId-Tye_3b1p8NWAj1HL9Ln783emq_QeiorN63HR0jjTE-U4WppLZ8PFkqJZBtBt4w/exec";
+    function hantarData(formElement) {
+        // Paparkan loading
+        loadingOverlay.style.display = 'flex';
 
-        const data = {
-            kediaman: document.getElementById("kediaman").value,
-            nama: document.getElementById("nama").value,
-            tahun: document.getElementById("tahun").value,
-            kelas: document.getElementById("kelas").value,
-            tujuan: document.getElementById("tujuan").value,
-            lainTujuan: document.getElementById("lainTujuan").value,
-            bayaran: document.getElementById("bayaran").value
-        };
+        // Guna FormData untuk mengumpul semua input field yang mempunyai atribut 'name'
+        const formData = new FormData(formElement);
 
-        fetch(url, {
+        fetch(GAS_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body: formData // Hantar sebagai FormData
         })
-        .then(() => {
-            // Paparkan halaman berjaya selepas data dihantar
-            nextPage(4);
+        .then(response => {
+             // Sembunyikan loading
+             loadingOverlay.style.display = 'none';
+
+             // Semak jika tindak balas OK (status 200)
+             if (response.ok) {
+                // Berjaya dihantar 
+                nextPage(4); 
+             } else {
+                // Ralat server atau Apps Script
+                alert("Ralat server: Gagal menghantar data. Sila semak Apps Script anda.");
+                console.error('Server error:', response.statusText);
+             }
         })
         .catch((err) => {
-            alert("Ralat menghantar data. Sila cuba lagi.");
+            // Sembunyikan loading
+            loadingOverlay.style.display = 'none';
+            // Ralat sambungan atau rangkaian
+            alert("Ralat rangkaian: Tidak dapat menyambung ke server. Sila cuba lagi.");
             console.error(err);
         });
     }
