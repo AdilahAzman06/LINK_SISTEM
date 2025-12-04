@@ -113,6 +113,7 @@
 </div>
 
 <script>
+    // Validasi halaman 1
     function validatePage1() {
         const req = ['kediaman','nama','tahun','kelas'];
         let ok = true;
@@ -127,18 +128,20 @@
         else alert("Sila lengkapkan semua maklumat.");
     }
 
+    // Tukar halaman
     function nextPage(p){
         document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
         document.getElementById('page'+p).classList.add('active');
         window.scrollTo(0,0);
     }
 
+    // Tunjuk input lain-lain jika dipilih
     document.getElementById("tujuan").addEventListener("change", function(){
         document.getElementById("lainTujuan").style.display =
             (this.value === "Lain-lain") ? "block" : "none";
     });
 
-    // 🔥 FIX UNTUK SEMUA TUJUAN MASUK GOOGLE SHEET
+    // Proses tujuan
     function prosesTujuan(){
         const t = document.getElementById("tujuan").value;
 
@@ -148,25 +151,25 @@
         }
 
         if (t === "Print") {
-            nextPage(3); // Pergi ke bayaran
+            nextPage(3); // Pergi ke halaman bayaran
         } else {
-            hantarData(); // Terus hantar data
-            nextPage(4);  // Terus ke halaman berjaya
+            // Terus hantar data untuk tujuan lain
+            hantarData();
         }
     }
 
+    // Papar QR jika dipilih
     function pilihBayaran(){
         document.getElementById("qrSection").style.display =
             document.getElementById("bayaran").value==="QR" ? "block" : "none";
     }
 
+    // Reset form
     function resetForm(){ location.reload(); }
 
-    // 🚀 HANTAR DATA KE GOOGLE SHEET
+    // Hantar data ke Google Sheet
     function hantarData() {
-
-        const url = 
-        "https://script.google.com/macros/s/AKfycbxId-Tye_3b1p8NWAj1HL9Ln783emq_QeiorN63HR0jjTE-U4WppLZ8PFkqJZBtBt4w/exec";
+        const url = "https://script.google.com/macros/s/AKfycbxId-Tye_3b1p8NWAj1HL9Ln783emq_QeiorN63HR0jjTE-U4WppLZ8PFkqJZBtBt4w/exec";
 
         const data = {
             kediaman: document.getElementById("kediaman").value,
@@ -183,6 +186,14 @@
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
+        })
+        .then(() => {
+            // Paparkan halaman berjaya selepas data dihantar
+            nextPage(4);
+        })
+        .catch((err) => {
+            alert("Ralat menghantar data. Sila cuba lagi.");
+            console.error(err);
         });
     }
 </script>
