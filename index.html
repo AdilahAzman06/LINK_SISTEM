@@ -1,244 +1,201 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistem Pengurusan Komputer & Pencetak</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Pengurusan Komputer & Pencetak</title>
 
-    <style>
-        .page { display: none; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px; margin-top: 20px; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .page.active { display: block; }
-        .form-select, .form-control { margin-bottom: 15px; }
-        .btn-custom { margin-top: 10px; }
-        .container { max-width: 700px; }
-        .is-invalid { border-color: #dc3545 !important; }
-        /* Gaya Loading Overlay */
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 1000;
-            /* Menggunakan Flexbox untuk centering */
-            display: flex; 
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#f2f4f7; }
+    .container { max-width:720px; }
+    .card { border:none; border-radius:14px; box-shadow:0 10px 25px rgba(0,0,0,.08); }
+    .hidden { display:none !important; }
+    #loading { position:fixed; inset:0; background:rgba(255,255,255,.85); display:none; align-items:center; justify-content:center; flex-direction:column; z-index:9999; }
+  </style>
 </head>
+<body>
 
-<body class="bg-light">
-
-<div id="loading-overlay">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-        <span class="visually-hidden">Memuat...</span>
-    </div>
-    <p class="ms-3 lead">Sedang menghantar maklumat...</p>
+<div id="loading">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-3">Memproses…</p>
 </div>
 
 <div class="container py-4">
 
-    <div class="text-center mb-4">
-        <img src="Logo_KV.jpg" alt="Logo Kolej Vokasional Pasir Mas" class="img-fluid rounded shadow" style="max-height: 150px;">
-        <h1 class="text-black">PEMBANGUNAN SISTEM PENGURUSAN PENGGUNAAN KOMPUTER DAN PENCETAK</h1>
-    </div>
-    
-    <form id="pengurusanForm">
+  <div class="text-center mb-4">
+    <img src="Logo_KV.jpg" alt="Gambar Muka Hadapan" class="img-fluid rounded shadow mb-3" style="max-height:160px">
+    <h4 class="fw-bold text-center">PEMBANGUNAN SISTEM PENGURUSAN PENGGUNAAN KOMPUTER DAN PENCETAK MENGGUNAKAN KOD QR OLEH PELAJAR ASRAMA DI CYBER CAFE ASRAMA KOLEJ VOKASIONAL PASIR MAS.</h4>
+  </div>
 
-        <div class="page active" id="page1">
-            <h2 class="text-secondary mb-3">1. Maklumat Pengguna</h2>
+  <form id="dataForm" class="card p-4" novalidate>
 
-            <label>Kediaman:<span class="text-danger">*</span></label>
-            <select id="kediaman" name="kediaman" class="form-select" required> 
-                <option value="">--Pilih--</option>
-                <option value="Aspura">Aspura</option>
-                <option value="Aspuri">Aspuri</option>
-            </select>
+    <!-- STEP 1 -->
+    <div id="step1">
+      <h5 class="text-primary mb-3">Maklumat Pengguna</h5>
 
-            <label>Nama Penuh:<span class="text-danger">*</span></label>
-            <input type="text" id="nama" name="nama" class="form-control" placeholder="Isi Nama Penuh" required>
+      <label class="fw-semibold">Kediaman *</label>
+      <select id="kediaman" class="form-select mb-3">
+        <option value="">-- Pilih --</option>
+        <option>Aspura</option>
+        <option>Aspuri</option>
+      </select>
 
-            <label>Tahun Pengajian:<span class="text-danger">*</span></label>
-            <select id="tahun" name="tahun" class="form-select" required>
-                <option value="">--Pilih--</option>
-                <option value="DVM">DVM</option>
-                <option value="SVM">SVM</option>
-            </select>
+      <label class="fw-semibold">Nama Penuh *</label>
+      <input type="text" id="nama" class="form-control mb-3">
 
-            <label>Kelas:<span class="text-danger">*</span></label>
-            <select id="kelas" name="kelas" class="form-select" required>
-                <option value="">--Pilih--</option>
-                <option value="BPP">BPP</option>
-                <option value="BPR">BPR</option>
-                <option value="BKP1">BKP1</option>
-                <option value="BKP2">BKP2</option>
-                <option value="BPM">BPM</option>
-                <option value="KSK1">KSK1</option>
-                <option value="KSK2">KSK2</option>
-            </select>
+      <label class="fw-semibold">Tahun *</label>
+      <select id="tahun" class="form-select mb-3">
+        <option value="">-- Pilih --</option>
+        <option>DVM</option>
+        <option>SVM</option>
+      </select>
 
-            <button type="button" onclick="validatePage1()" class="btn btn-primary w-100 btn-custom">Seterusnya ➡️</button>
-        </div>
+      <label class="fw-semibold">Kelas *</label>
+      <select id="kelas" class="form-select mb-4">
+        <option value="">-- Pilih --</option>
+        <option>BPP</option>
+        <option>BPR</option>
+        <option>BKP1</option>
+        <option>BKP2</option>
+        <option>BPM</option>
+        <option>KSK1</option>
+        <option>KSK2</option>
+      </select>
 
-        <div class="page" id="page2">
-            <h2 class="text-secondary mb-3">2. Pilih Tujuan</h2>
-
-            <label>Tujuan Penggunaan:</label>
-            <select id="tujuan" name="tujuan" class="form-select">
-                <option value="">--Pilih Tujuan--</option>
-                <option value="Print">Print</option>
-                <option value="Penggunaan Komputer">Penggunaan Komputer</option>
-                <option value="Lain-lain">Lain-lain</option>
-            </select>
-
-            <input type="text" id="lainTujuan" name="lainTujuan" class="form-control" placeholder="Nyatakan tujuan lain" style="display:none;">
-
-            <div class="d-flex justify-content-between mt-4">
-                <button type="button" onclick="nextPage(1)" class="btn btn-secondary">⬅️ Kembali</button>
-                <button type="button" onclick="prosesTujuan()" class="btn btn-primary">Seterusnya ➡️</button>
-            </div>
-        </div>
-
-        <div class="page" id="page3">
-            <h2 class="text-secondary mb-3">3. Cara Pembayaran</h2>
-
-            <label>Pilih Cara Pembayaran:</label>
-            <select id="bayaran" name="bayaran" class="form-select" onchange="pilihBayaran()">
-                <option value="">--Pilih Cara Pembayaran--</option>
-                <option value="Tunai">Tunai</option>
-                <option value="QR">Imbas Kod QR</option>
-            </select>
-
-            <div id="qrSection" class="text-center p-3 mt-3 border rounded bg-warning-subtle" style="display:none; align-items: center; justify-content: center; flex-direction: column;">
-                <h3>Imbas QR</h3>
-                <img src="QR_CikguRuslina.jpeg" class="img-fluid mt-2" style="max-height: 200px;">
-                <small class="text-muted mt-2">Sila pastikan pembayaran dibuat sebelum menghantar.</small>
-            </div>
-
-            <div class="d-flex justify-content-between mt-4">
-                <button type="button" onclick="nextPage(2)" class="btn btn-secondary">⬅️ Kembali</button>
-                <button type="submit" class="btn btn-success">Hantar Maklumat ✅</button>
-            </div>
-        </div>
-    </form>
-    <div class="page text-center" id="page4">
-        <h2 class="text-success mb-4">🎉 Berjaya!</h2>
-        <p class="lead">Maklumat anda telah **berjaya** dihantar ke Google Sheet.</p>
-        <button onclick="resetForm()" class="btn btn-info btn-lg mt-3">Isi Semula</button>
+      <button type="button" class="btn btn-primary w-100" onclick="goStep2()">Seterusnya</button>
     </div>
 
+    <!-- STEP 2 -->
+    <div id="step2" class="hidden">
+      <h5 class="text-primary mb-3">Tujuan Penggunaan</h5>
+
+      <select id="tujuan" class="form-select mb-3">
+        <option value="">-- Pilih --</option>
+        <option value="Print">Print</option>
+        <option value="Komputer">Penggunaan Komputer</option>
+        <option value="Lain">Lain-lain</option>
+      </select>
+
+      <input type="text" id="lain" class="form-control mb-3 hidden" placeholder="Nyatakan tujuan">
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" onclick="showStep(1)">Kembali</button>
+        <button type="button" class="btn btn-primary" onclick="goStep3()">Seterusnya</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 (hanya untuk Print) -->
+    <div id="step3" class="hidden">
+      <h5 class="text-primary mb-3">Pembayaran</h5>
+
+      <select id="bayaran" class="form-select mb-3">
+        <option value="">-- Pilih --</option>
+        <option>Tunai</option>
+        <option>QR</option>
+      </select>
+
+      <div id="qr" class="border rounded p-3 bg-warning-subtle hidden text-center">
+        <p class="fw-semibold">Imbas Kod QR</p>
+        <img src="QR_CikguRuslina.jpeg" alt="Kod QR Pembayaran" class="img-fluid rounded" style="max-height:200px">
+        <small class="text-muted d-block mt-2">Sila imbas QR untuk membuat pembayaran</small>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" onclick="showStep(2)">Kembali</button>
+        <button type="button" class="btn btn-success" onclick="submitData()">Hantar</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="success" class="hidden text-center">
+      <h3 class="text-success fw-bold">🎉 Tahniah!</h3>
+      <p class="lead">Maklumat anda telah <strong>berjaya</strong> direkodkan.</p>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="button" class="btn btn-primary" onclick="resetForm()">Isi Semula</button>
+      </div>
+    </div>
+
+  </form>
 </div>
 
 <script>
-    // **URL Apps Script Anda yang baru**
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw2IhaJojwuf_GDboTR0F_XPcKwh5L_diSd3ZBw3_NMr6RELmbPyrS5HhcDfZOCvuDa/exec";
-    
-    const form = document.getElementById('pengurusanForm');
-    const loadingOverlay = document.getElementById('loading-overlay');
-    
-    // Event Listener untuk Borang: Mencegah penghantaran standard dan mengendalikan dengan fetch
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Pastikan pilihan bayaran telah dibuat jika sedang berada di Page 3
-        if(document.getElementById('bayaran').value === "" && document.getElementById('page3').classList.contains('active')){
-            alert("Sila pilih cara pembayaran.");
-            return;
-        }
-        hantarData(e.target);
-    });
+const loading = document.getElementById('loading');
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxneelC9-N7p7Nuv9RA6Yl3sBTCwbxxxPDKuKA3hZnvUyy_iv9eLHfTE6syla_NuD0q/exec";
 
-    // Validasi halaman 1
-    function validatePage1() {
-        const req = ['kediaman', 'nama', 'tahun', 'kelas'];
-        let ok = true;
+function showStep(n){
+  ['step1','step2','step3','success'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById('step'+n).classList.remove('hidden');
+}
 
-        req.forEach(id => {
-            const el = document.getElementById(id);
-            el.classList.remove('is-invalid');
-            if (el.value === "") { el.classList.add('is-invalid'); ok = false; }
-        });
+function goStep2(){
+  if(!kediaman.value || !nama.value || !tahun.value || !kelas.value){
+    alert('Sila lengkapkan semua maklumat');
+    return;
+  }
+  showStep(2);
+}
 
-        if (ok) nextPage(2);
-        else alert("Sila lengkapkan semua maklumat.");
+function goStep3(){
+  if(!tujuan.value){
+    alert('Sila pilih tujuan');
+    return;
+  }
+  if(tujuan.value === 'Print'){
+    showStep(3);
+  } else {
+    submitData(); // Komputer & Lain-lain terus berjaya
+  }
+}
+
+tujuan.addEventListener('change',()=>{
+  lain.classList.toggle('hidden', tujuan.value !== 'Lain');
+});
+
+bayaran.addEventListener('change',()=>{
+  qr.classList.toggle('hidden', bayaran.value !== 'QR');
+});
+
+function submitData(){
+  loading.style.display='flex';
+
+  const data = {
+    kediaman: kediaman.value,
+    nama: nama.value,
+    tahun: tahun.value,
+    kelas: kelas.value,
+    tujuan: tujuan.value === 'Lain' ? lain.value : tujuan.value,
+    bayaran: bayaran.value || (tujuan.value==="Print" ? '' : 'Tiada')
+  };
+
+  // Hantar data ke Google Sheet
+  fetch(GAS_URL, {
+    method:'POST',
+    body: new URLSearchParams(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    loading.style.display='none';
+    if(result.result === "success"){
+      ['step1','step2','step3'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+      document.getElementById('success').classList.remove('hidden');
+    } else {
+      alert("Ralat: "+result.message);
     }
+  })
+  .catch(err=>{
+    loading.style.display='none';
+    alert("Ralat sambungan, sila cuba lagi");
+    console.error(err);
+  });
+}
 
-    // Tukar halaman
-    function nextPage(p) {
-        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-        document.getElementById('page' + p).classList.add('active');
-        window.scrollTo(0, 0);
-    }
-
-    // Tunjuk input lain-lain jika dipilih
-    document.getElementById("tujuan").addEventListener("change", function () {
-        document.getElementById("lainTujuan").style.display =
-            (this.value === "Lain-lain") ? "block" : "none";
-    });
-
-    // Proses tujuan: "Print" ke Page 3, selain itu hantar terus
-    function prosesTujuan() {
-        const t = document.getElementById("tujuan").value;
-
-        if (t === "") {
-            alert("Sila pilih tujuan.");
-            return;
-        }
-
-        if (t === "Print") {
-            nextPage(3); 
-        } else {
-            // Jika bukan Print, teruskan penghantaran dari Page 2
-            hantarData(form); 
-        }
-    }
-
-    // Papar QR jika dipilih
-    function pilihBayaran() {
-        document.getElementById("qrSection").style.display =
-            document.getElementById("bayaran").value === "QR" ? "flex" : "none";
-    }
-
-    // Reset form
-    function resetForm() { location.reload(); }
-
-    // Hantar data ke Google Sheet
-    function hantarData(formElement) {
-        // Paparkan loading
-        loadingOverlay.style.display = 'flex';
-
-        // Guna FormData untuk mengumpul semua input field yang mempunyai atribut 'name'
-        const formData = new FormData(formElement);
-
-        fetch(GAS_URL, {
-            method: "POST",
-            body: formData // Hantar sebagai FormData
-        })
-        .then(response => {
-             // Sembunyikan loading
-             loadingOverlay.style.display = 'none';
-
-             // Semak jika tindak balas OK (status 200)
-             if (response.ok) {
-                // Berjaya dihantar 
-                nextPage(4); 
-             } else {
-                // Ralat server atau Apps Script
-                alert("Ralat server: Gagal menghantar data. Sila semak Apps Script anda.");
-                console.error('Server error:', response.statusText);
-             }
-        })
-        .catch((err) => {
-            // Sembunyikan loading
-            loadingOverlay.style.display = 'none';
-            // Ralat sambungan atau rangkaian
-            alert("Ralat rangkaian: Tidak dapat menyambung ke server. Sila cuba lagi.");
-            console.error(err);
-        });
-    }
+function resetForm(){
+  document.getElementById('dataForm').reset();
+  showStep(1);
+}
 </script>
 
 </body>
